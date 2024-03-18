@@ -38,6 +38,11 @@ class EmployeeController (private val employeeService: EmployeeService){
         val employee = employeeService.editAttendanceRecord(id)
         return ResponseEntity.ok(employee)
     }
+
+    @GetMapping("{id}/calculatehours")
+    fun calculateHours(@PathVariable id: Long): Double {
+        return employeeService.calculateHours(id)
+    }
     @DeleteMapping("{id}")
     fun deleteEmployee (@PathVariable id: Long): ResponseEntity<Unit> {
         val employee = employeeService.deleteEmployee(id)

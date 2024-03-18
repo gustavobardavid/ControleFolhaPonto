@@ -6,7 +6,6 @@ import com.bardavid.controlePonto.Repositories.EmployeeRepository
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Service
 class EmployeeService (private val employeeRepository: EmployeeRepository){
@@ -26,7 +25,7 @@ class EmployeeService (private val employeeRepository: EmployeeRepository){
     fun addAttendanceRecord(employeeId: Long): Employee {
         val employee = employeeRepository.findById(employeeId).orElseThrow { IllegalArgumentException("Employee not found") }
         val attendanceRecord = AttendanceRecord(
-            checkIn = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+            checkIn = LocalDateTime.now(),
             employee = employee
         )
         employee.attendanceRecords.add(attendanceRecord)
@@ -40,12 +39,18 @@ class EmployeeService (private val employeeRepository: EmployeeRepository){
             if (lastRecord.checkOut != null) {
                 throw IllegalStateException("Last attendance record already has a check-out time")
             } else {
-                lastRecord.checkOut = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                lastRecord.checkOut = LocalDateTime.now()
             }
         } else {
             throw IllegalStateException("Last attendance record not exists")
         }
         return employeeRepository.save(employee)
+    }
+
+    fun calculateHours(employeeId: Long): Double {
+        val employee =
+            employeeRepository.findById(employeeId).orElseThrow { IllegalArgumentException("Employee not found") }
+        return employee.calculateHours()
     }
 
     fun deleteEmployee(id: Long) {
