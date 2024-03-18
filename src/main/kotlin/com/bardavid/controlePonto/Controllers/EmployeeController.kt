@@ -27,12 +27,17 @@ class EmployeeController (private val employeeService: EmployeeService){
         return ResponseEntity.ok(employee)
     }
 
-    @PostMapping("{id}/attendance")
+    @PostMapping("{id}/checkin")
     fun addAttendanceRecord(@PathVariable id: Long): ResponseEntity<Employee> {
         val employee = employeeService.addAttendanceRecord(id)
         return ResponseEntity.ok(employee)
     }
 
+    @PostMapping("{id}/checkout")
+    fun editAttendanceRecord (@PathVariable id: Long): ResponseEntity<Employee> {
+        val employee = employeeService.editAttendanceRecord(id)
+        return ResponseEntity.ok(employee)
+    }
     @DeleteMapping("{id}")
     fun deleteEmployee (@PathVariable id: Long): ResponseEntity<Unit> {
         val employee = employeeService.deleteEmployee(id)

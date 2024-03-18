@@ -10,7 +10,7 @@ data class AttendanceRecord (
     @GeneratedValue
     val id: Long?=null,
     var checkIn: String,
-    val checkOut: LocalDateTime?= null,
+    var checkOut: String?=null,
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)

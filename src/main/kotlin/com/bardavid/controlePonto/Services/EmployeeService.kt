@@ -33,6 +33,21 @@ class EmployeeService (private val employeeRepository: EmployeeRepository){
         return employeeRepository.save(employee)
     }
 
+    fun editAttendanceRecord(employeeId: Long) : Employee {
+        val employee = employeeRepository.findById(employeeId).orElseThrow { IllegalArgumentException("Employee not found") }
+        val lastRecord = employee.attendanceRecords.lastOrNull()
+        if (lastRecord != null) {
+            if (lastRecord.checkOut != null) {
+                throw IllegalStateException("Last attendance record already has a check-out time")
+            } else {
+                lastRecord.checkOut = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+            }
+        } else {
+            throw IllegalStateException("Last attendance record not exists")
+        }
+        return employeeRepository.save(employee)
+    }
+
     fun deleteEmployee(id: Long) {
         return employeeRepository.deleteById(id)
     }
